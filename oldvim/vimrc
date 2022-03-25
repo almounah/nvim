@@ -1,0 +1,89 @@
+call plug#begin()
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'gruvbox-community/gruvbox'
+Plug 'preservim/nerdtree'
+Plug 'jistr/vim-nerdtree-tabs'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'itchyny/lightline.vim'
+Plug 'airblade/vim-gitgutter'
+Plug 'majutsushi/tagbar'
+Plug 'maxmellon/vim-jsx-pretty'
+Plug 'sheerun/vim-polyglot'
+Plug 'tpope/vim-sensible'
+Plug 'dense-analysis/ale'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'tomasr/molokai'
+call plug#end()
+
+filetype plugin indent on
+syntax on
+
+" turn on line numbering
+set number relativenumber
+set cursorline
+set cursorlineopt=number
+
+" Fix slow insert
+set timeout timeoutlen=100 ttimeoutlen=100
+
+" More history
+set history=8192
+
+" sane editing
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+"set scrolloff=8
+set laststatus=2
+set expandtab
+
+" color scheme
+syntax on
+colorscheme gruvbox
+highlight Normal guibg=NONE ctermbg=NONE 
+let g:lightline = { 'colorscheme': 'gruvbox' }
+
+" file browser
+let NERDTreeIgnore = ['\.pyc$', '__pycache__']
+let NERDTreeMinimalUI = 1
+let g:nerdtree_open = 0
+map <C-n> :call NERDTreeToggle()<CR>
+function NERDTreeToggle()
+    NERDTreeTabsToggle
+    if g:nerdtree_open == 1
+        let g:nerdtree_open = 0
+    else
+        let g:nerdtree_open = 1
+        wincmd p
+    endif
+endfunction
+
+function! StartUp()
+    if 0 == argc()
+        NERDTree
+    end
+endfunction
+autocmd VimEnter * call StartUp()
+
+" tags
+map <C-t> :TagbarToggle<CR>
+
+" Ale
+let g:ale_enabled=0
+map <C-e> <Plug>(ale_next_wrap)
+map <C-r> <Plug>(ale_previous_wrap)
+let g:ale_lint_on_text_changed = 1
+
+" indent/unindent with tab/shift-tab
+vmap <Tab> >gv
+vmap <S-Tab> <gv
+
+" fzf 
+nnoremap <C-p> :Files <CR>
+
+" split windows
+nmap <space><Up> :wincmd k<CR>
+nmap <space><Down> :wincmd j<CR>
+nmap <space><Left> :wincmd h<CR>
+nnoremap <space><Right> :wincmd l<CR>
